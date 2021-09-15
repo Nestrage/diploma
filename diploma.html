@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diploma</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <input type="number" value="1000" id="ej" />
+    <input type="number" value="1" id="r" />
+    <button class="btn" onclick="IsoLine()">Draw</button>
+
+    <canvas id="myChart"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      function IsoLine() {
+        $("#myChart").replaceWith($('<canvas id="myChart" ></canvas>'));
+        var ctx = document.getElementById("myChart").getContext("2d");
+
+        var ej = document.getElementById("ej").value;
+        var r = document.getElementById("r").value;
+        var degr = [];
+        var resultArray = [];
+        var tension = [];
+        // function IsoLine() {
+        for (e1 = 100; e1 <= 300; e1 += 10) {
+          tension = [];
+
+          for (fi = 10; fi <= 360; fi += 10) {
+            tension.push({
+              x: fi,
+              y: Math.cbrt(
+                ((ej * r * r * r) /
+                  (Math.sqrt(e1 * e1 + e1 * e1) * 2 * Math.PI)) *
+                  Math.sqrt(
+                    1 +
+                      3 *
+                        Math.cos((fi * Math.PI) / 180) *
+                        Math.cos((fi * Math.PI) / 180)
+                  )
+              ),
+            });
+          }
+          resultArray.push({
+            label: `R E = ${e1} `,
+            fill: false,
+            backgroundColor: `rgba(129, 129,129},0.2)`, //фон
+            borderColor: "rgba(0,181,198,1)", //линия
+            pointBorderColor: "#fff",
+            pointBackgroundColor: "rgba(179,181,198,1)",
+            showLine: true,
+            data: tension.map((el) => el.y),
+          });
+        }
+        //}
+        // }
+        //function IsoLine() {
+
+        var scatterChart = new Chart(ctx, {
+          type: "radar",
+          data: {
+            labels: tension.map((el) => el.x),
+            datasets: resultArray,
+          },
+          options: {
+            title: {
+              display: true,
+              text: "Distribution in % of world population",
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
